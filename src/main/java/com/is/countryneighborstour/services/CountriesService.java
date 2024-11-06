@@ -1,8 +1,8 @@
 package com.is.countryneighborstour.services;
 
-import com.is.countryneighborstour.dto.CountryBordersDto;
+import com.is.countryneighborstour.dto.CountryInfoDto;
 import reactor.core.publisher.Flux;
 
 public interface CountriesService {
-    Flux<CountryBordersDto> getAllBorders(String countryCode);
+    Flux<CountryInfoDto> getAllBordersTest(String countryCode);
 }
