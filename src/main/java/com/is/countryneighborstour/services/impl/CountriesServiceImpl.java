@@ -2,6 +2,8 @@ package com.is.countryneighborstour.services.impl;
 
 import com.is.countryneighborstour.dto.CountryInfoDto;
 import com.is.countryneighborstour.services.CountriesService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -15,9 +17,18 @@ import org.springframework.web.reactive.function.client.WebClient;
  **/
 
 @Service
+@PropertySource("classpath:application.properties")
 public class CountriesServiceImpl implements CountriesService {
 
-    private final WebClient webClient = WebClient.create("https://restcountries.com/v3.1/name/");
+    @Value("${rest-countries.api.address}")
+    private String restCountriesApiAddress;
+
+    private final WebClient webClient;
+
+    public CountriesServiceImpl(@Value("${rest-countries.api.address}") String restCountriesApiAddress) {
+        this.restCountriesApiAddress = restCountriesApiAddress;
+        this.webClient = WebClient.create(restCountriesApiAddress);
+    }
 
     @Override
     public CountryInfoDto getAllBorders(String countryCode) {

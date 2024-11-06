@@ -2,6 +2,7 @@ package com.is.countryneighborstour.services.impl;
 
 import com.is.countryneighborstour.dto.RatesDto;
 import com.is.countryneighborstour.services.CurrencyService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -18,13 +19,25 @@ import reactor.core.publisher.Flux;
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
 
-    private final WebClient webClient = WebClient.create("http://data.fixer.io/api/latest");
+    @Value("${fixer.api.address}")
+    private String fixerApiAddress;
+
+    @Value("${fixer.api.key}")
+    private String fixerApiKey;
+
+    private final WebClient webClient;
+
+    public CurrencyServiceImpl(@Value("${fixer.api.address}") String fixerApiAddress, @Value("${fixer.api.key}") String fixerApiKey) {
+        this.fixerApiKey = fixerApiKey;
+        this.fixerApiAddress = fixerApiAddress;
+        this.webClient = WebClient.create(fixerApiAddress);
+    }
 
     @Override
     public Flux<RatesDto> getAllRates(String baseCurrency) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("&base=" + baseCurrency)
-                        .queryParam("access_key", "4bca71fb7d35a64e8178b152bb558a55")
+                        .queryParam("access_key", fixerApiKey)
                         .build())
                 .retrieve()
                 .bodyToFlux(RatesDto.class);
