@@ -16,7 +16,7 @@ public class CurrenciesController {
 
     private final CurrencyService currencyService;
 
-    @GetMapping("/get_rates/{baseCurrency}")
+    @GetMapping("/get-rates/{baseCurrency}")
     public Flux<RatesDto> getRates(@PathVariable String baseCurrency) {
         return currencyService.getAllRates(baseCurrency);
     }
