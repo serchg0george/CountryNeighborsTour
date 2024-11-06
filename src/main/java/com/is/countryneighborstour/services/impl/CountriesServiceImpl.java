@@ -6,6 +6,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
+/**
+ * Service implementation for retrieving country information, including border details, based on country codes.
+ *
+ * This service uses a WebClient to fetch country data from the REST Countries API
+ * (https://restcountries.com/v3.1/name/). The service can retrieve information for a specified country
+ * and returns it as a stream of {@link CountryInfoDto} objects.
+ *
+ **/
+
 @Service
 public class CountriesServiceImpl implements CountriesService {
 
