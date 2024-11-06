@@ -1,23 +1,22 @@
 package com.is.countryneighborstour.controllers;
 
 import com.is.countryneighborstour.dto.CountryInfoDto;
-import com.is.countryneighborstour.services.impl.CountriesServiceImpl;
+import com.is.countryneighborstour.services.CountriesService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/api/v1/countries")
 @AllArgsConstructor
 public class CountriesController {
 
-    private final CountriesServiceImpl countriesService;
+    private final CountriesService countriesService;
 
-    @GetMapping("/get_country/{countryCode}")
-    public Flux<CountryInfoDto> getAllCountriesTest(@PathVariable String countryCode) {
-        return countriesService.getAllBordersTest(countryCode);
+    @GetMapping("/get-country/{countryCode}")
+    public CountryInfoDto getAllCountries(@PathVariable String countryCode) {
+        return countriesService.getAllBorders(countryCode);
     }
 }
