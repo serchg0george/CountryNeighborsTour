@@ -1,7 +1,7 @@
 package com.is.countryneighborstour.controllers;
 
 import com.is.countryneighborstour.dto.RatesDto;
-import com.is.countryneighborstour.services.impl.CurrencyServiceImpl;
+import com.is.countryneighborstour.services.CurrencyService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +14,7 @@ import reactor.core.publisher.Flux;
 @AllArgsConstructor
 public class CurrenciesController {
 
-    private final CurrencyServiceImpl currencyService;
+    private final CurrencyService currencyService;
 
     @GetMapping("/get_rates/{baseCurrency}")
     public Flux<RatesDto> getRates(@PathVariable String baseCurrency) {
