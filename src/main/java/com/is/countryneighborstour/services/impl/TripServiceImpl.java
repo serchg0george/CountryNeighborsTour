@@ -13,14 +13,14 @@ public class TripServiceImpl implements TripService {
     private final CountriesService countriesService;
 
     @Override
-    public String calculatePriceForCountry(String country, int totalBudget, int budgetPerCountry, String currency) {
+    public String calculatePriceForCountry(String country, Integer totalBudget, Integer budgetPerCountry, String currency) {
 
         CountryInfoDto countryInfo = countriesService.getAllBorders(country);
 
 
-        int neighborCount =  countryInfo.getBorders().size();
-        int timesToVisit = totalBudget / (neighborCount * budgetPerCountry);
-        int remainingBudget = totalBudget % (neighborCount * budgetPerCountry);
+        Integer neighborCount =  countryInfo.getBorders().size();
+        Integer timesToVisit = totalBudget / (neighborCount * budgetPerCountry);
+        Integer remainingBudget = totalBudget % (neighborCount * budgetPerCountry);
 
         return "Times to visit: " + timesToVisit + " Remaining Budget: " + remainingBudget + " " + currency;
     }
