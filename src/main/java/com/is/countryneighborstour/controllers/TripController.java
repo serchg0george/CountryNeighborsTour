@@ -1,6 +1,7 @@
 package com.is.countryneighborstour.controllers;
 
 import com.is.countryneighborstour.dto.TripCalculationRequest;
+import com.is.countryneighborstour.dto.TripCalculationResponse;
 import com.is.countryneighborstour.services.TripService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,15 @@ public class TripController {
     TripService tripService;
 
     @GetMapping("/calculate-trip")
-    public ResponseEntity<String> calculatePriceForCountry(@RequestBody TripCalculationRequest request) {
-        return ResponseEntity.ok(tripService.calculatePriceForCountry(
+    public ResponseEntity<TripCalculationResponse> calculatePriceForCountry(@RequestBody TripCalculationRequest request) {
+
+        TripCalculationResponse response = tripService.calculatePriceForCountry(
                 request.getCountry(),
                 request.getTotalBudget(),
                 request.getBudgetPerCountry(),
                 request.getCurrency()
-        ));
+        );
+
+        return ResponseEntity.ok(response);
     }
 }
