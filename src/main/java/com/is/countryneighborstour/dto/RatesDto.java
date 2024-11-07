@@ -2,6 +2,7 @@ package com.is.countryneighborstour.dto;
 
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -13,5 +14,5 @@ import java.util.Map;
 
 @Getter
 public class RatesDto {
-    Map<String, Double> rates;
+    Map<String, BigDecimal> rates;
 }

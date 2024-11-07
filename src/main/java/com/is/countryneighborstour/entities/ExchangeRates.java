@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -35,7 +36,7 @@ public class ExchangeRates {
     private String targetCurrency;
 
     @Column(name = "rate", nullable = false)
-    private Double rate;
+    private BigDecimal rate;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;

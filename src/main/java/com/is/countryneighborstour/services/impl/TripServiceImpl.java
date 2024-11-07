@@ -35,8 +35,8 @@ public class TripServiceImpl implements TripService {
             ExchangeRates rate = exchangeRateRepository.findByBaseCurrencyAndTargetCurrencyAndDate(baseCurrency, localCurrency, LocalDate.now());
 
             if (rate != null) {
-                Double rateValue = rate.getRate();
-                BigDecimal neededLocalCurrency = BigDecimal.valueOf(rateValue * budgetPerCountry).setScale(2, RoundingMode.HALF_UP);
+                BigDecimal rateValue = rate.getRate();
+                BigDecimal neededLocalCurrency = BigDecimal.valueOf(rateValue.longValue() * budgetPerCountry).setScale(2, RoundingMode.HALF_UP);
                 currenciesMap.put(localCurrency, neededLocalCurrency.doubleValue());
             }
         }
