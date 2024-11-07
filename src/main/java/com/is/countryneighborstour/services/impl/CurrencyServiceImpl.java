@@ -2,6 +2,7 @@ package com.is.countryneighborstour.services.impl;
 
 import com.is.countryneighborstour.dto.RatesDto;
 import com.is.countryneighborstour.services.CurrencyService;
+import com.is.countryneighborstour.services.ExchangeRateService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -27,10 +28,13 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     private final WebClient webClient;
 
-    public CurrencyServiceImpl(@Value("${fixer.api.address}") String fixerApiAddress, @Value("${fixer.api.key}") String fixerApiKey) {
+    ExchangeRateService exchangeRateService;
+
+    public CurrencyServiceImpl(@Value("${fixer.api.address}") String fixerApiAddress, @Value("${fixer.api.key}") String fixerApiKey, ExchangeRateService exchangeRateService) {
         this.fixerApiKey = fixerApiKey;
         this.fixerApiAddress = fixerApiAddress;
         this.webClient = WebClient.create(fixerApiAddress);
+        this.exchangeRateService = exchangeRateService;
     }
 
     @Override
@@ -40,7 +44,10 @@ public class CurrencyServiceImpl implements CurrencyService {
                         .queryParam("access_key", fixerApiKey)
                         .build())
                 .retrieve()
-                .bodyToFlux(RatesDto.class);
+                .bodyToFlux(RatesDto.class)
+                .doOnNext(ratesDto ->
+                    exchangeRateService.saveExchangeRates(baseCurrency, ratesDto.getRates())
+                );
     }
 
 }
