@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(TripCountryBadRequestException.class)
-    ResponseEntity<Object> handleCountryNotFoundException(TripCountryBadRequestException exception) {
+    @ExceptionHandler(TripCountryNotFoundException.class)
+    ResponseEntity<Object> handleCountryNotFoundException(TripCountryNotFoundException exception) {
         ExceptionResponse response = new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage(), LocalDateTime.now());
         return new ResponseEntity<>(response, response.status());
     }
 
-    @ExceptionHandler(CurrencyBadRequestException.class)
-    ResponseEntity<Object> handleCurrencyNotFoundException(CurrencyBadRequestException request) {
+    @ExceptionHandler(CurrencyNotFoundException.class)
+    ResponseEntity<Object> handleCurrencyNotFoundException(CurrencyNotFoundException request) {
         ExceptionResponse response = new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, request.getMessage(), LocalDateTime.now());
         return new ResponseEntity<>(response, response.status());
     }
