@@ -3,7 +3,9 @@ package com.is.countryneighborstour.services.impl;
 import com.is.countryneighborstour.dto.CountryBudgetDto;
 import com.is.countryneighborstour.dto.CountryInfoDto;
 import com.is.countryneighborstour.dto.TripCalculationResponse;
+import com.is.countryneighborstour.entities.CountryCurrency;
 import com.is.countryneighborstour.entities.ExchangeRates;
+import com.is.countryneighborstour.repositories.CountryCurrencyRepository;
 import com.is.countryneighborstour.repositories.ExchangeRateRepository;
 import com.is.countryneighborstour.services.CountriesService;
 import com.is.countryneighborstour.services.TripService;
@@ -27,6 +29,7 @@ public class TripServiceImpl implements TripService {
 
     private final CountriesService countriesService;
     private final ExchangeRateRepository exchangeRateRepository;
+    private final CountryCurrencyRepository countryCurrencyRepository;
 
     @Override
     public TripCalculationResponse calculatePriceForCountry(String country, Integer totalBudget, Integer budgetPerCountry, String baseCurrency) {
@@ -52,12 +55,19 @@ public class TripServiceImpl implements TripService {
         List<CountryBudgetDto> countryBudgets = new ArrayList<>();
 
         for (String border : borders) {
-            String localCurrency = findLocalCurrency(border);
-            ExchangeRates rate = exchangeRateRepository.findByBaseCurrencyAndTargetCurrencyAndDate(baseCurrency, localCurrency, LocalDate.now());
+            CountryCurrency countryCurrency = countryCurrencyRepository.findByCountryCode(border);
+            String localCurrency = countryCurrency.getCurrencyCode();
 
-            if (rate != null) {
-                BigDecimal neededLocalCurrency = calculateNeededLocalCurrency(rate.getRate(), budgetPerCountry);
-                countryBudgets.add(new CountryBudgetDto(border, localCurrency, neededLocalCurrency));
+            if (localCurrency.equals(baseCurrency)) {
+                countryBudgets.add(new CountryBudgetDto(border, localCurrency, BigDecimal.valueOf(budgetPerCountry)));
+            } else {
+
+                ExchangeRates rate = exchangeRateRepository.findByBaseCurrencyAndTargetCurrencyAndDate(baseCurrency, localCurrency, LocalDate.now());
+
+                if (rate != null) {
+                    BigDecimal neededLocalCurrency = calculateNeededLocalCurrency(rate.getRate(), budgetPerCountry);
+                    countryBudgets.add(new CountryBudgetDto(border, localCurrency, neededLocalCurrency));
+                }
             }
         }
 
@@ -74,7 +84,7 @@ public class TripServiceImpl implements TripService {
         Integer totalTripCost = neighborCount * budgetPerCountry;
         Integer timesToVisit = totalBudget / totalTripCost;
         Integer remainingBudget = totalBudget % totalTripCost;
-        return new Integer[] {timesToVisit, remainingBudget};
+        return new Integer[]{timesToVisit, remainingBudget};
     }
 
     @Override
