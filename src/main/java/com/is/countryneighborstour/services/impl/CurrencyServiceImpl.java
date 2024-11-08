@@ -1,7 +1,7 @@
 package com.is.countryneighborstour.services.impl;
 
 import com.is.countryneighborstour.dto.RatesDto;
-import com.is.countryneighborstour.exceptions.CurrencyBadRequestException;
+import com.is.countryneighborstour.exceptions.CurrencyNotFoundException;
 import com.is.countryneighborstour.services.CurrencyService;
 import com.is.countryneighborstour.services.ExchangeRateService;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +46,7 @@ public class CurrencyServiceImpl implements CurrencyService {
                 .bodyToFlux(RatesDto.class)
                 .flatMap(ratesDto -> {
                     if (ratesDto.getRates() == null || ratesDto.getRates().isEmpty()) {
-                        return Mono.error(new CurrencyBadRequestException(baseCurrency));
+                        return Mono.error(new CurrencyNotFoundException(baseCurrency));
                     }
                     return Mono.just(ratesDto);
                 })

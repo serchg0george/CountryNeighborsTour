@@ -2,8 +2,6 @@ package com.is.countryneighborstour.controllers;
 
 import com.is.countryneighborstour.dto.CountryInfoDto;
 import com.is.countryneighborstour.services.CountriesService;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +22,7 @@ public class CountriesController {
     private final CountriesService countriesService;
 
     @GetMapping("/get-country/{countryCode}")
-    public ResponseEntity<CountryInfoDto> getAllCountries(@PathVariable @NotBlank @Size(min = 2, max = 3) String countryCode) {
+    public ResponseEntity<CountryInfoDto> getAllCountries(@PathVariable String countryCode) {
         return ResponseEntity.ok(countriesService.getAllBorders(countryCode));
     }
 }
