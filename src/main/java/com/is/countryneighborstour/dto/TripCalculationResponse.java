@@ -1,6 +1,9 @@
 package com.is.countryneighborstour.dto;
 
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,8 +20,17 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class TripCalculationResponse {
+
+    @NotNull
     private Integer timesToVisit;
+
+    @NotNull
     private Integer remainingBudget;
+
+    @NotBlank
+    @Size(min = 3, max = 3)
     private String currency;
+
+    @NotNull
     private List<CountryBudgetDto> countryBudgets;
 }

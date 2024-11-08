@@ -1,5 +1,8 @@
 package com.is.countryneighborstour.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 /**
@@ -9,8 +12,18 @@ import lombok.Getter;
 
 @Getter
 public class TripCalculationRequest {
+
+    @NotBlank
+    @Size(min = 2, max = 3)
     private String country;
+
+    @NotNull
     private Integer totalBudget;
+
+    @NotNull
     private Integer budgetPerCountry;
+
+    @NotBlank
+    @Size(min = 3, max = 3)
     private String currency;
 }

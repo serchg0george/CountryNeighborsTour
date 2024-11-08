@@ -1,6 +1,7 @@
 package com.is.countryneighborstour.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,13 +25,14 @@ import java.time.LocalDate;
 public class ExchangeRates {
 
     @Id
+    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "base_currency", nullable = false)
+    @Column(name = "base_currency", nullable = false, length = 3)
     private String baseCurrency;
 
-    @Column(name = "target_currency", nullable = false)
+    @Column(name = "target_currency", nullable = false, length = 3)
     private String targetCurrency;
 
     @Column(name = "rate", nullable = false)
