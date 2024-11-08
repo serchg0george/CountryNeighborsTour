@@ -25,4 +25,11 @@ public class GlobalExceptionHandler {
         ExceptionResponse response = new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, request.getMessage(), LocalDateTime.now());
         return new ResponseEntity<>(response, response.status());
     }
+
+    @ExceptionHandler(TripCountryBadRequestException.class)
+    ResponseEntity<Object> handleTripCountryBadRequestException(TripCountryBadRequestException request) {
+        ExceptionResponse response = new ExceptionResponse(HttpStatus.BAD_REQUEST, request.getMessage(), LocalDateTime.now());
+        return new ResponseEntity<>(response, response.status());
+    }
+
 }
