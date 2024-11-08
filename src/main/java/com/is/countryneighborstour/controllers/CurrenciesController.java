@@ -2,8 +2,6 @@ package com.is.countryneighborstour.controllers;
 
 import com.is.countryneighborstour.dto.RatesDto;
 import com.is.countryneighborstour.services.CurrencyService;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +23,7 @@ public class CurrenciesController {
     private final CurrencyService currencyService;
 
     @GetMapping("/get-rates/{baseCurrency}")
-    public ResponseEntity<Flux<RatesDto>> getRates(@PathVariable @NotBlank @Size(min = 3, max = 3) String baseCurrency) {
+    public ResponseEntity<Flux<RatesDto>> getRates(@PathVariable String baseCurrency) {
         return ResponseEntity.ok(currencyService.getAllRates(baseCurrency));
     }
 }
