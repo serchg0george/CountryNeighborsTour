@@ -1,5 +1,6 @@
 package com.is.countryneighborstour.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -12,5 +13,7 @@ import java.util.Map;
 
 @Getter
 public class RatesDto {
+
+    @NotNull
     private Map<String, BigDecimal> rates;
 }

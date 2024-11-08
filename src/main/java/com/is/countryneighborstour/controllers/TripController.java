@@ -5,6 +5,7 @@ import com.is.countryneighborstour.dto.TripCalculationResponse;
 import com.is.countryneighborstour.services.TripService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor()
 public class TripController {
 
-    TripService tripService;
+    private final TripService tripService;
 
     @GetMapping("/calculate-trip")
-    public ResponseEntity<TripCalculationResponse> calculatePriceForCountry(@RequestBody TripCalculationRequest request) {
+    public ResponseEntity<TripCalculationResponse> calculatePriceForCountry(@RequestBody @Validated TripCalculationRequest request) {
 
         TripCalculationResponse response = tripService.calculatePriceForCountry(
                 request.getCountry(),

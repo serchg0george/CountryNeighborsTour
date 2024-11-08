@@ -1,5 +1,6 @@
 package com.is.countryneighborstour.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.util.List;
@@ -13,6 +14,10 @@ import java.util.Map;
 
 @Getter
 public class CountryInfoDto {
+
+    @NotNull
     private List<String> borders;
+
+    @NotNull
     private Map<String, CurrencyDto> currencies;
 }
