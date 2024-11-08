@@ -1,6 +1,7 @@
 package com.is.countryneighborstour.services.impl;
 
 import com.is.countryneighborstour.dto.CountryInfoDto;
+import com.is.countryneighborstour.exceptions.TripCountryBadRequestException;
 import com.is.countryneighborstour.exceptions.TripCountryNotFoundException;
 import com.is.countryneighborstour.services.CountriesService;
 import jakarta.annotation.PostConstruct;
@@ -36,8 +37,10 @@ public class CountriesServiceImpl implements CountriesService {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder.path(countryCode).build())
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, response -> response.bodyToMono(String.class)
+                .onStatus(httpStatusCode -> httpStatusCode == HttpStatusCode.valueOf(404), response -> response.bodyToMono(String.class)
                         .flatMap(errorBody -> Mono.error(new TripCountryNotFoundException(countryCode))))
+                .onStatus(httpStatusCode -> httpStatusCode == HttpStatusCode.valueOf(400), response -> response.bodyToMono(String.class)
+                        .flatMap(errorBody -> Mono.error(new TripCountryBadRequestException(countryCode))))
                 .bodyToFlux(CountryInfoDto.class).blockFirst();
     }
 }
