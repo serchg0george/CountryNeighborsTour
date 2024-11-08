@@ -11,11 +11,9 @@ import java.time.LocalDate;
 import java.util.Map;
 
 /**
- *
  * This service interacts with the {@link ExchangeRateRepository} to save exchange
  * rate data, including base and target currencies along with their rates.
- *
- **/
+ */
 
 @Service
 public class ExchangeRateServiceImpl implements ExchangeRateService {

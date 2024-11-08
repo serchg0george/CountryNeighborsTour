@@ -11,12 +11,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Service implementation for handling currency exchange rate data.
- * <p>
  * This service uses a WebClient to fetch the latest exchange rates from an external API
  * (http://data.fixer.io/api/latest). The service can retrieve all exchange rates based on
  * a specified base currency and convert them to a Flux of {@link RatesDto}.
- **/
+ */
 
 @Service
 public class CurrencyServiceImpl implements CurrencyService {

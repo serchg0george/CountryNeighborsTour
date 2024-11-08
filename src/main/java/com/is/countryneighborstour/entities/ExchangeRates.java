@@ -10,12 +10,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- *
  * This entity class is mapped to the {@code t_exchange_rates} table in the database and
  * contains the exchange rate data, including the base currency, target currency, rate,
  * and the date of the exchange rate.
- *
- **/
+ */
 
 @Getter
 @Setter
