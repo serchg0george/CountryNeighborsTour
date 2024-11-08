@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller for handling trip-related operations such as calculating the
+ * price required to visit a country based on provided budget and currency.
+ */
+
 @RestController
 @RequestMapping("/api/v1/trip")
 @AllArgsConstructor()

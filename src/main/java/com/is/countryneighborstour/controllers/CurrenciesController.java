@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
+/**
+ * Controller for handling currency-related operations, such as fetching exchange rates
+ * based on a specified base currency.
+ */
+
 @RestController
 @RequestMapping("/api/v1/currencies")
 @AllArgsConstructor

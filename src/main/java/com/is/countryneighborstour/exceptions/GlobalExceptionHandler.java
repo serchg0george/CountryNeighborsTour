@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
+/**
+ * Global exception handler that handles custom exceptions and returns a structured
+ * response with appropriate HTTP status and error details.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

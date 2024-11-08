@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller for handling country-related operations, such as retrieving country
+ * information and neighboring countries based on a provided country code.
+ */
+
 @RestController
 @RequestMapping("/api/v1/countries")
 @AllArgsConstructor
