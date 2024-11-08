@@ -5,16 +5,15 @@ import com.is.countryneighborstour.repositories.ExchangeRateRepository;
 import com.is.countryneighborstour.services.ExchangeRateService;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Map;
 
 /**
- *
  * This service interacts with the {@link ExchangeRateRepository} to save exchange
  * rate data, including base and target currencies along with their rates.
- *
- **/
+ */
 
 @Service
 public class ExchangeRateServiceImpl implements ExchangeRateService {
@@ -26,7 +25,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     }
 
     @Override
-    public void saveExchangeRates(String baseCurrency, Map<String, Double> rates) {
+    public void saveExchangeRates(String baseCurrency, Map<String, BigDecimal> rates) {
         rates.forEach((targetCurrency, rate) -> {
             ExchangeRates exchangeRates = new ExchangeRates();
             exchangeRates.setBaseCurrency(baseCurrency);
