@@ -8,6 +8,6 @@ import lombok.Getter;
 
 @Getter
 public class CurrencyDto {
-    String name;
-    String symbol;
+    private String name;
+    private String symbol;
 }

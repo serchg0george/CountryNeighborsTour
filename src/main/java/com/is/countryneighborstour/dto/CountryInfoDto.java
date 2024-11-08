@@ -13,6 +13,6 @@ import java.util.Map;
 
 @Getter
 public class CountryInfoDto {
-    List<String> borders;
-    Map<String, CurrencyDto> currencies;
+    private List<String> borders;
+    private Map<String, CurrencyDto> currencies;
 }

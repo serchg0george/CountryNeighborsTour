@@ -12,5 +12,5 @@ import java.util.Map;
 
 @Getter
 public class RatesDto {
-    Map<String, BigDecimal> rates;
+    private Map<String, BigDecimal> rates;
 }
