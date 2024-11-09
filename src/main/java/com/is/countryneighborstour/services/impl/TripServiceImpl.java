@@ -47,7 +47,7 @@ public class TripServiceImpl implements TripService {
     @Override
     public List<String> getBorderCountries(String country) {
         CountryInfoDto countryInfo = countriesService.getAllBorders(country);
-        return countryInfo.getBorders();
+        return countryInfo.borders();
     }
 
     @Override
@@ -85,11 +85,6 @@ public class TripServiceImpl implements TripService {
         Integer timesToVisit = totalBudget / totalTripCost;
         Integer remainingBudget = totalBudget % totalTripCost;
         return new Integer[]{timesToVisit, remainingBudget};
-    }
-
-    @Override
-    public String findLocalCurrency(String country) {
-        return countriesService.getAllBorders(country).getCurrencies().keySet().stream().findFirst().orElse("Unknown");
     }
 
 }
