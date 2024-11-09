@@ -16,6 +16,4 @@ public interface TripService {
     BigDecimal calculateNeededLocalCurrency(BigDecimal rateValue, Integer budgetPerCountry);
 
     Integer[] calculateTripNumbers(Integer totalBudget, Integer budgetPerCountry, Integer neighborCount);
-
-    String findLocalCurrency(String country);
 }

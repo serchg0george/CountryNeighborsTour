@@ -3,7 +3,9 @@ package com.is.countryneighborstour.services.impl;
 import com.is.countryneighborstour.dto.CountryBudgetDto;
 import com.is.countryneighborstour.dto.CountryInfoDto;
 import com.is.countryneighborstour.dto.TripCalculationResponse;
+import com.is.countryneighborstour.entities.CountryCurrency;
 import com.is.countryneighborstour.entities.ExchangeRates;
+import com.is.countryneighborstour.repositories.CountryCurrencyRepository;
 import com.is.countryneighborstour.repositories.ExchangeRateRepository;
 import com.is.countryneighborstour.services.CountriesService;
 import com.is.countryneighborstour.services.TripService;
@@ -13,8 +15,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service implementation for handling trip calculations, including budget allocation per country,
@@ -27,6 +29,7 @@ public class TripServiceImpl implements TripService {
 
     private final CountriesService countriesService;
     private final ExchangeRateRepository exchangeRateRepository;
+    private final CountryCurrencyRepository countryCurrencyRepository;
 
     @Override
     public TripCalculationResponse calculatePriceForCountry(String country, Integer totalBudget, Integer budgetPerCountry, String baseCurrency) {
@@ -44,25 +47,35 @@ public class TripServiceImpl implements TripService {
     @Override
     public List<String> getBorderCountries(String country) {
         CountryInfoDto countryInfo = countriesService.getAllBorders(country);
-        return countryInfo.getBorders();
+        return countryInfo.borders();
     }
 
     @Override
     public List<CountryBudgetDto> calculateCountryBudgets(List<String> borders, Integer budgetPerCountry, String baseCurrency) {
-        List<CountryBudgetDto> countryBudgets = new ArrayList<>();
 
-        for (String border : borders) {
-            String localCurrency = findLocalCurrency(border);
-            ExchangeRates rate = exchangeRateRepository.findByBaseCurrencyAndTargetCurrencyAndDate(baseCurrency, localCurrency, LocalDate.now());
+        Map<String, CountryBudgetDto> countryBudgets = borders.stream()
+                .collect(Collectors.toMap(border -> border, border -> new CountryBudgetDto()));
 
-            if (rate != null) {
-                BigDecimal neededLocalCurrency = calculateNeededLocalCurrency(rate.getRate(), budgetPerCountry);
-                countryBudgets.add(new CountryBudgetDto(border, localCurrency, neededLocalCurrency));
-            }
-        }
+        Map<String, String> countryCurrencyMap = countryCurrencyRepository.findByCountryCodeIn(borders).stream()
+                .collect(Collectors.toMap(CountryCurrency::getCountryCode, CountryCurrency::getCurrencyCode));
 
-        return countryBudgets;
+        List<String> targetCurrencies = new ArrayList<>(countryCurrencyMap.values());
+        List<ExchangeRates> exchangeRates = exchangeRateRepository.findByBaseCurrencyAndTargetCurrencyInAndDate(baseCurrency, targetCurrencies, LocalDate.now());
+
+        Map<String, BigDecimal> exchangeRateMap = exchangeRates.stream()
+                .collect(Collectors.toMap(ExchangeRates::getTargetCurrency, ExchangeRates::getRate));
+
+        countryBudgets.forEach((country, countryData) -> {
+            countryData.setCurrency(countryCurrencyMap.get(country));
+            countryData.setCountry(country);
+            countryData.setRequiredBudget(calculateNeededLocalCurrency(exchangeRateMap.get(countryData.getCurrency()), budgetPerCountry));
+        });
+
+
+        return new ArrayList<>(countryBudgets.values());
     }
+
+
 
     @Override
     public BigDecimal calculateNeededLocalCurrency(BigDecimal rateValue, Integer budgetPerCountry) {
@@ -74,12 +87,7 @@ public class TripServiceImpl implements TripService {
         Integer totalTripCost = neighborCount * budgetPerCountry;
         Integer timesToVisit = totalBudget / totalTripCost;
         Integer remainingBudget = totalBudget % totalTripCost;
-        return new Integer[] {timesToVisit, remainingBudget};
-    }
-
-    @Override
-    public String findLocalCurrency(String country) {
-        return countriesService.getAllBorders(country).getCurrencies().keySet().stream().findFirst().orElse("Unknown");
+        return new Integer[]{timesToVisit, remainingBudget};
     }
 
 }

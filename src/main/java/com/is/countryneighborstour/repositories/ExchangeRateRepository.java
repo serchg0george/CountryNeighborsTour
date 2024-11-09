@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Repository interface for accessing and managing exchange rate data in the database.
@@ -13,5 +14,5 @@ import java.time.LocalDate;
 
 @Repository
 public interface ExchangeRateRepository extends JpaRepository<ExchangeRates, Long> {
-    ExchangeRates findByBaseCurrencyAndTargetCurrencyAndDate(String baseCurrency, String targetCurrency, LocalDate date);
+    List<ExchangeRates> findByBaseCurrencyAndTargetCurrencyInAndDate(String baseCurrency, List<String> targetCurrency, LocalDate date);
 }

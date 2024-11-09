@@ -27,7 +27,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     private WebClient webClient;
 
-    ExchangeRateService exchangeRateService;
+    private final ExchangeRateService exchangeRateService;
 
     public CurrencyServiceImpl(@Value("${fixer.api.address}") String fixerApiAddress, @Value("${fixer.api.key}") String fixerApiKey, ExchangeRateService exchangeRateService) {
         this.fixerApiKey = fixerApiKey;
@@ -45,12 +45,12 @@ public class CurrencyServiceImpl implements CurrencyService {
                 .retrieve()
                 .bodyToFlux(RatesDto.class)
                 .flatMap(ratesDto -> {
-                    if (ratesDto.getRates() == null || ratesDto.getRates().isEmpty()) {
+                    if (ratesDto.rates() == null || ratesDto.rates().isEmpty()) {
                         return Mono.error(new CurrencyNotFoundException(baseCurrency));
                     }
                     return Mono.just(ratesDto);
                 })
-                .doOnNext(ratesDto -> exchangeRateService.saveExchangeRates(baseCurrency, ratesDto.getRates()));
+                .doOnNext(ratesDto -> exchangeRateService.saveExchangeRates(baseCurrency, ratesDto.rates()));
     }
 
 }

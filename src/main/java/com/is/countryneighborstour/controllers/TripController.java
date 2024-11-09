@@ -27,10 +27,10 @@ public class TripController {
     public ResponseEntity<TripCalculationResponse> calculatePriceForCountry(@RequestBody @Validated TripCalculationRequest request) {
 
         TripCalculationResponse response = tripService.calculatePriceForCountry(
-                request.getCountry(),
-                request.getTotalBudget(),
-                request.getBudgetPerCountry(),
-                request.getCurrency()
+                request.country(),
+                request.totalBudget(),
+                request.budgetPerCountry(),
+                request.currency()
         );
 
         return ResponseEntity.ok(response);

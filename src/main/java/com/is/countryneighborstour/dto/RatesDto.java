@@ -1,7 +1,6 @@
 package com.is.countryneighborstour.dto;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -11,9 +10,5 @@ import java.util.Map;
  * as a {@link Double} value relative to a specified base currency.
  */
 
-@Getter
-public class RatesDto {
-
-    @NotNull
-    private Map<String, BigDecimal> rates;
+public record RatesDto(@NotNull Map<String, BigDecimal> rates) {
 }
