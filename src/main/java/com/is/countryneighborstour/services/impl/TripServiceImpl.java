@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service implementation for handling trip calculations, including budget allocation per country,
@@ -52,27 +52,30 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public List<CountryBudgetDto> calculateCountryBudgets(List<String> borders, Integer budgetPerCountry, String baseCurrency) {
-        List<CountryBudgetDto> countryBudgets = new ArrayList<>();
 
-        for (String border : borders) {
-            CountryCurrency countryCurrency = countryCurrencyRepository.findByCountryCode(border);
-            String localCurrency = countryCurrency.getCurrencyCode();
+        Map<String, CountryBudgetDto> countryBudgets = borders.stream()
+                .collect(Collectors.toMap(border -> border, border -> new CountryBudgetDto()));
 
-            if (localCurrency.equals(baseCurrency)) {
-                countryBudgets.add(new CountryBudgetDto(border, localCurrency, BigDecimal.valueOf(budgetPerCountry)));
-            } else {
+        Map<String, String> countryCurrencyMap = countryCurrencyRepository.findByCountryCodeIn(borders).stream()
+                .collect(Collectors.toMap(CountryCurrency::getCountryCode, CountryCurrency::getCurrencyCode));
 
-                ExchangeRates rate = exchangeRateRepository.findByBaseCurrencyAndTargetCurrencyAndDate(baseCurrency, localCurrency, LocalDate.now());
+        List<String> targetCurrencies = new ArrayList<>(countryCurrencyMap.values());
+        List<ExchangeRates> exchangeRates = exchangeRateRepository.findByBaseCurrencyAndTargetCurrencyInAndDate(baseCurrency, targetCurrencies, LocalDate.now());
 
-                if (rate != null) {
-                    BigDecimal neededLocalCurrency = calculateNeededLocalCurrency(rate.getRate(), budgetPerCountry);
-                    countryBudgets.add(new CountryBudgetDto(border, localCurrency, neededLocalCurrency));
-                }
-            }
-        }
+        Map<String, BigDecimal> exchangeRateMap = exchangeRates.stream()
+                .collect(Collectors.toMap(ExchangeRates::getTargetCurrency, ExchangeRates::getRate));
 
-        return countryBudgets;
+        countryBudgets.forEach((country, countryData) -> {
+            countryData.setCurrency(countryCurrencyMap.get(country));
+            countryData.setCountry(country);
+            countryData.setRequiredBudget(calculateNeededLocalCurrency(exchangeRateMap.get(countryData.getCurrency()), budgetPerCountry));
+        });
+
+
+        return new ArrayList<>(countryBudgets.values());
     }
+
+
 
     @Override
     public BigDecimal calculateNeededLocalCurrency(BigDecimal rateValue, Integer budgetPerCountry) {
