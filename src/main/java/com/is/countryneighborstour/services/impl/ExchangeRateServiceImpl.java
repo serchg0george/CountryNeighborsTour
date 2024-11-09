@@ -18,7 +18,7 @@ import java.util.Map;
 @Service
 public class ExchangeRateServiceImpl implements ExchangeRateService {
 
-    ExchangeRateRepository exchangeRateRepository;
+    private final ExchangeRateRepository exchangeRateRepository;
 
     public ExchangeRateServiceImpl(ExchangeRateRepository exchangeRateRepository) {
         this.exchangeRateRepository = exchangeRateRepository;
