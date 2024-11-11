@@ -37,7 +37,7 @@ class CountriesServiceImplTest {
     }
 
     @Test
-    void getAllBorders_success() {
+    void testGetAllBorders_success() {
 
         String countryCode = "USA";
         String mockResponse = "{ \"borders\": [\"CAN\", \"MEX\"] }";
@@ -56,7 +56,7 @@ class CountriesServiceImplTest {
     }
 
     @Test
-    void getAllBorders_notFound() {
+    void testGetAllBorders_notFound() {
 
         String countryCode = "XYZ";
 
@@ -66,7 +66,7 @@ class CountriesServiceImplTest {
     }
 
     @Test
-    void getAllBorders_badRequest() {
+    void testGetAllBorders_badRequest() {
 
         String countryCode = "";
 
