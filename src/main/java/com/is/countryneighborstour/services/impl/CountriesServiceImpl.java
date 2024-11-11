@@ -4,8 +4,6 @@ import com.is.countryneighborstour.dto.CountryInfoDto;
 import com.is.countryneighborstour.exceptions.TripCountryBadRequestException;
 import com.is.countryneighborstour.exceptions.TripCountryNotFoundException;
 import com.is.countryneighborstour.services.CountriesService;
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -19,16 +17,15 @@ import reactor.core.publisher.Mono;
  */
 
 @Service
-@RequiredArgsConstructor
 public class CountriesServiceImpl implements CountriesService {
 
     @Value("${rest-countries.api.address}")
     private String restCountriesApiAddress;
 
-    private WebClient webClient;
+    private final WebClient webClient;
 
-    @PostConstruct
-    public void init() {
+    public CountriesServiceImpl(@Value("${rest-countries.api.address}") String restCountriesApiAddress) {
+        this.restCountriesApiAddress = restCountriesApiAddress;
         this.webClient = WebClient.create(restCountriesApiAddress);
     }
 
