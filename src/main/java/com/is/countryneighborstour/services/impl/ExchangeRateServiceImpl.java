@@ -27,11 +27,12 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     @Override
     public void saveExchangeRates(String baseCurrency, Map<String, BigDecimal> rates) {
         rates.forEach((targetCurrency, rate) -> {
-            ExchangeRates exchangeRates = new ExchangeRates();
-            exchangeRates.setBaseCurrency(baseCurrency);
-            exchangeRates.setTargetCurrency(targetCurrency);
-            exchangeRates.setRate(rate);
-            exchangeRates.setDate(Date.valueOf(LocalDate.now()).toLocalDate());
+            ExchangeRates exchangeRates = ExchangeRates.builder()
+                    .baseCurrency(baseCurrency)
+                    .targetCurrency(targetCurrency)
+                    .rate(rate)
+                    .date(Date.valueOf(LocalDate.now()).toLocalDate())
+                    .build();
             exchangeRateRepository.save(exchangeRates);
         });
     }
