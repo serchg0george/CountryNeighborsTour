@@ -25,7 +25,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Value("${fixer.api.key}")
     private String fixerApiKey;
 
-    private WebClient webClient;
+    private final WebClient webClient;
 
     private final ExchangeRateService exchangeRateService;
 
